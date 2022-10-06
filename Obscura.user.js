@@ -19,23 +19,28 @@ var lock = 0;
 $(() => {
   "use strict";
   var table = $("tbody");
-  var pag = $(".pagination");
-  pag.click(() => {
-    lock = 0;
-  });
+
   console.log("mid:" + mid);
   table.click(check);
 });
 
 function check() {
+  var pag = $(".pagination");
+  pag.click(() => {
+    lock = 0;
+  });
+
   if (lock) {
     console.log("Locked, already run once on this list");
     return;
   }
-  lock = !lock;
+
   var time = $("[title='Time since last updated']");
   if (time.attr("class") != "sorting_desc") return;
+
+  lock = 1;
   console.log("Check started");
+
   var table = $("tbody");
   table.children().each(function () {
     var tr = $(this);
