@@ -15,15 +15,24 @@
 
 var mid = GM_getValue("mid", 0);
 var flag = 0;
+var lock = 0;
 $(() => {
   "use strict";
   var table = $("tbody");
-  var thead = $("thead");
+  var pag = $(".pagination");
+  pag.click(() => {
+    lock = 0;
+  });
   console.log("mid:" + mid);
   table.click(check);
 });
 
 function check() {
+  if (lock) {
+    console.log("Locked, already run once on this list");
+    return;
+  }
+  lock = !lock;
   var time = $("[title='Time since last updated']");
   if (time.attr("class") != "sorting_desc") return;
   console.log("Check started");
