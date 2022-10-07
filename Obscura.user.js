@@ -2,14 +2,14 @@
 // @name         Obscura
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
+// @description  Information is Power
 // @author       toolsmax
 // @grant        unsafeWindow
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-start
 // @require      https://code.jquery.com/jquery-3.6.1.min.js
-// @match        https://aetherhub.com/Decks/Standard-BO1/?user=MTGA-Assistant-Meta&updated=365
+// @match        https://aetherhub.com/Decks/Standard-BO1/?user=MTGA-Assistant-Meta&*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // ==/UserScript==
 
@@ -25,11 +25,6 @@ $(() => {
 });
 
 function check() {
-  var pag = $(".pagination");
-  pag.click(() => {
-    lock = 0;
-  });
-
   if (lock) {
     console.log("Locked, already run once on this list");
     return;
@@ -37,6 +32,12 @@ function check() {
 
   var time = $("[title='Time since last updated']");
   if (time.attr("class") != "sorting_desc") return;
+  if (!$("#year").parent().attr("class").includes("active")) return;
+
+  var pag = $(".pagination");
+  pag.click(() => {
+    lock = 0;
+  });
 
   lock = 1;
   console.log("Check started");
