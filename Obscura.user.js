@@ -9,7 +9,7 @@
 // @grant        GM_getValue
 // @run-at       document-start
 // @require      https://code.jquery.com/jquery-3.6.1.min.js
-// @match        https://aetherhub.com/Decks/Standard-BO1/?user=MTGA-Assistant-Meta&*
+// @match        https://aetherhub.com/Decks/Standard-BO1/?user=MTGA-Assistant-Meta*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // ==/UserScript==
 
