@@ -9,8 +9,8 @@
 // @grant        GM_getValue
 // @run-at       document-start
 // @require      https://code.jquery.com/jquery-3.6.1.min.js
-// @match        https://mtgdecks.net/Standard/arena*sort:Deck.date/direction:desc
-// @match        https://mtgdecks.net/Standard/BO3*sort:Deck.date/direction:desc
+// @match        https://mtgdecks.net/Standard/arena*
+// @match        https://mtgdecks.net/Standard/BO3*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // ==/UserScript==
 
