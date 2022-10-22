@@ -1,8 +1,10 @@
 const http = require("http");
+const https = require("https");
 const parse = require("csv-parse");
 const hostname = "127.0.0.1";
 const port = 7191;
 const fs = require("fs");
+require("dotenv").config();
 const basics = [
   "Plains",
   "Island",
@@ -32,12 +34,45 @@ parser.on("readable", () => {
 parser.on("error", (err) => {
   console.log(err.message);
 });
+const file = fs.createWriteStream("collection.csv");
 
-fs.createReadStream("collection.csv").pipe(parser);
+var expireTime = new Date(process.env.EXPIRE_TIME);
+
+console.log("expire time: " + expireTime);
+console.log("user id: " + process.env.USER_ID);
+console.log("access token: " + process.env.USER_TOKEN);
+
+if (expireTime < new Date()) {
+  console.log("Expired");
+  fs.createReadStream("collection.csv").pipe(parser);
+} else {
+  https.get(
+    "https://mtgarena.pro/mtg/do3.php?cmd=export",
+    {
+      headers: {
+        Cookie: [
+          "MTGAPROUser=" + process.env.USER_ID,
+          "MTGAPROUserToken=" + process.env.USER_TOKEN,
+        ],
+      },
+    },
+    (res) => {
+      res.pipe(file);
+      res.pipe(parser);
+      console.log("statusCode:", res.statusCode);
+      console.log("headers:", res.headers);
+      file.on("finish", () => {
+        file.close();
+        // fs.createReadStream("collection.csv").pipe(parser);
+      });
+    }
+  );
+}
 
 function analyzeDeck(deck) {
   var deckList = deck.split("\n");
   var cnt = 0;
+  console.log("Deck ID: "+deck);
   for (var i = 0; i < deckList.length; i++) {
     if (deckList[i] == "") {
       continue;
