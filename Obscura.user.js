@@ -7,6 +7,7 @@
 // @grant        unsafeWindow
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_xmlhttpRequest
 // @run-at       document-start
 // @require      https://code.jquery.com/jquery-3.6.1.min.js
 // @match        https://aetherhub.com/Decks/Standard-BO1/?user=MTGA-Assistant-Meta*
@@ -68,7 +69,16 @@ function check() {
           console.log("new mid: " + id);
         }
       }
-      tr.children().eq(6).text("OK");
+      $.get("/Deck/MtgoDeckExport/" + id, (data) => {
+        GM_xmlhttpRequest({
+          method: "POST",
+          url: "http://localhost:7191",
+          data: data,
+          onload: (response) => {
+            tr.children().eq(6).text(response.responseText);
+          },
+        });
+      });
     }
     tr.children()
       .eq(2)
