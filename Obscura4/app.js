@@ -34,18 +34,14 @@ parser.on("readable", () => {
 parser.on("error", (err) => {
   console.log(err.message);
 });
-const file = fs.createWriteStream("collection.csv");
 
 var expireTime = new Date(process.env.EXPIRE_TIME);
-
-console.log("expire time: " + expireTime);
-console.log("user id: " + process.env.USER_ID);
-console.log("access token: " + process.env.USER_TOKEN);
 
 if (expireTime < new Date()) {
   console.log("Expired");
   fs.createReadStream("collection.csv").pipe(parser);
 } else {
+  const file = fs.createWriteStream("collection.csv");
   https.get(
     "https://mtgarena.pro/mtg/do3.php?cmd=export",
     {
@@ -59,12 +55,6 @@ if (expireTime < new Date()) {
     (res) => {
       res.pipe(file);
       res.pipe(parser);
-      console.log("statusCode:", res.statusCode);
-      console.log("headers:", res.headers);
-      file.on("finish", () => {
-        file.close();
-        // fs.createReadStream("collection.csv").pipe(parser);
-      });
     }
   );
 }
@@ -72,7 +62,6 @@ if (expireTime < new Date()) {
 function analyzeDeck(deck) {
   var deckList = deck.split("\n");
   var cnt = 0;
-  console.log("Deck ID: "+deck);
   for (var i = 0; i < deckList.length; i++) {
     if (deckList[i] == "") {
       continue;
@@ -83,12 +72,8 @@ function analyzeDeck(deck) {
     if (basics.indexOf(name) != -1) continue;
     if (dict[name] == undefined) {
       cnt -= count;
-      // console.log(name + " is missing " + count + " copies");
     } else {
       cnt += Math.min(dict[name] - count, 0);
-      if (dict[name] < count) {
-        // console.log(name + " is missing " + (count - dict[name]) + " copies");
-      }
     }
   }
   return cnt.toString();
@@ -99,7 +84,6 @@ const server = http.createServer((req, res) => {
   req
     .on("data", (chunk) => {
       s += chunk;
-      // console.log("chunk: " + chunk);
     })
     .on("error", (err) => {
       console.log("error: " + err);

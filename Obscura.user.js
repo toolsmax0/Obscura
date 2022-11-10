@@ -56,9 +56,10 @@ function check() {
       .text(id > mid ? "New" : "Old");
 
     var a = tr.find("a");
+    var url1 = a.attr("href");
+
+    a.attr("href", "/Metagame/Standard-BO1" + url1);
     var url = a.attr("href");
-    a.attr("href", "/Metagame/Standard-BO1/" + url);
-    url = a.attr("href");
 
     function memory() {
       if ($(this).html().match(/meta/) != null) {
@@ -69,14 +70,21 @@ function check() {
           console.log("new mid: " + id);
         }
       }
-      $.get("/Deck/MtgoDeckExport/" + id, (data) => {
-        GM_xmlhttpRequest({
-          method: "POST",
-          url: "http://localhost:7191",
-          data: data,
-          onload: (response) => {
-            tr.children().eq(6).text(response.responseText);
-          },
+      $.get(url1, (data) => {
+        data = $(data).find(".mb-0:eq(2)");
+        var text = $(data).text();
+        var rate = text.split(" ")[0];
+        tr.children().eq(7).text(rate);
+      }).then(() => {
+        $.get("/Deck/MtgoDeckExport/" + id, (data) => {
+          GM_xmlhttpRequest({
+            method: "POST",
+            url: "http://localhost:7191",
+            data: data,
+            onload: (response) => {
+              tr.children().eq(6).text(response.responseText);
+            },
+          });
         });
       });
     }
