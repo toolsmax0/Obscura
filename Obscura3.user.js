@@ -54,7 +54,7 @@ function flushDict() {
   var date = GM_getValue("date", "");
   console.log("date: " + date);
   for (var key in dict) {
-    if (daysBetween(date, dict[key]) > 1) {
+    if (daysBetween(date, dict[key]) > 3) {
       delete dict[key];
     }
   }
@@ -76,7 +76,7 @@ $(() => {
         var url = tr.find("a").attr("href");
         if (url == undefined) return;
         var time = trimTime(tr.children().eq(10).children().eq(0).text());
-        if (checkDate(time) < -1){
+        if (checkDate(time) < -3){
             next = null;
             return false;
         }

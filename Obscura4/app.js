@@ -20,6 +20,7 @@ const basics = [
 ];
 var dict = {};
 var parser = parse.parse();
+let file;
 
 parser.on("readable", () => {
   var record;
@@ -32,16 +33,9 @@ parser.on("readable", () => {
 });
 
 parser.on("error", (err) => {
-  console.log(err.message);
+  console.log(Date()+': '+err.message);
 });
-
-var expireTime = new Date(process.env.EXPIRE_TIME);
-
-if (expireTime < new Date()) {
-  console.log("Expired");
-  fs.createReadStream("collection.csv").pipe(parser);
-} else {
-  const file = fs.createWriteStream("collection.csv");
+function download(){
   https.get(
     "https://mtgarena.pro/mtg/do3.php?cmd=export",
     {
@@ -56,7 +50,23 @@ if (expireTime < new Date()) {
       res.pipe(file);
       res.pipe(parser);
     }
-  );
+  ).on("error", async (err) => {
+    console.log(Date()+': '+err.message);
+    console.log(Date()+': '+'Retrying in 5 seconds');
+    //wait 5 seconds and try again
+    // await new Promise(resolve => setTimeout(resolve, 5000));
+    setTimeout(download, 5000);
+  });
+}
+
+var expireTime = new Date(process.env.EXPIRE_TIME);
+
+if (expireTime < new Date()) {
+  console.log(Date()+" : Cookie Expired");
+  fs.createReadStream("collection.csv").pipe(parser);
+} else {
+  file = fs.createWriteStream("collection.csv");
+  download();
 }
 
 function analyzeDeck(deck) {
@@ -86,7 +96,7 @@ const server = http.createServer((req, res) => {
       s += chunk;
     })
     .on("error", (err) => {
-      console.log("error: " + err);
+      console.log(Date()+': '+"error: " + err);
     })
     .on("end", () => {
       res.statusCode = 200;
@@ -96,5 +106,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+  console.log(Date()+': '+`Server running at http://${hostname}:${port}/`);
 });
