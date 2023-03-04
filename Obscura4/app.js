@@ -1,7 +1,6 @@
 const http = require("http");
 const https = require("https");
 const parse = require("csv-parse");
-const notifier = require('node-notifier');
 const hostname = "127.0.0.1";
 const port = 7191;
 const fs = require("fs");
@@ -22,6 +21,7 @@ const basics = [
 var dict = {};
 var parser = parse.parse();
 let file;
+let isExpired = false;
 
 parser.on("readable", () => {
   var record;
@@ -63,11 +63,7 @@ function download(){
 var expireTime = new Date(process.env.EXPIRE_TIME);
 
 if (expireTime < new Date()) {
-  notifier.notify({
-    title: 'MTGA Deck Analyzer',
-    message: 'Cookie has expired, please update .env',
-    sound: true, // Only Notification Center or Windows Toasters
-  });
+  isExpired = true;
   console.log(Date()+": Cookie Expired");
   fs.createReadStream("collection.csv").pipe(parser);
 } else {
@@ -92,7 +88,11 @@ function analyzeDeck(deck) {
       cnt += Math.min(dict[name] - count, 0);
     }
   }
-  return cnt.toString();
+  let ans = cnt.toString();
+  if(isExpired){
+    ans = "!! "+ans+" !!";
+  }
+  return ans;
 }
 
 const server = http.createServer((req, res) => {

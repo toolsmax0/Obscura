@@ -1,0 +1,19 @@
+{
+  "name": "obscura4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "csv-parse": "^5.3.5",
+    "dotenv": "^16.0.3",
+    "node-notifier": "^10.0.1",
+    "node-windows": "^1.0.0-beta.8",
+    "notenv": "^2.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

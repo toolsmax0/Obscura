@@ -8,6 +8,7 @@ const svc = new Service({
 	maxRestarts: '40', 
 });
 
+
 svc.on('install', () => {
 	svc.start();
 	console.log('Installation completed.');
