@@ -15,8 +15,8 @@
 // ==/UserScript==
 
 let common = 60;
-let uncommon = 62;
-let rare = 66;
+let uncommon = 63;
+let rare = 67;
 let mythic = 75;
 
 let rgb = ["white", "#e6ffcc", "#fff2cc", "#ffcccc"];
