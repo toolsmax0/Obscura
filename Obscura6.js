@@ -14,7 +14,20 @@
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // ==/UserScript==
 
-let threshold = 60;
+let common = 60;
+let uncommon = 62;
+let rare = 66;
+let mythic = 75;
+
+let rgb = ["white", "#e6ffcc", "#fff2cc", "#ffcccc"];
+
+function rank(rate) {
+  if (rate < common) return 0;
+  if (rate < uncommon) return 1;
+  if (rate < rare) return 2;
+  if (rate < mythic) return 3;
+  return 4;
+}
 
 function GetColors(data, type, url) {
   if (type === "display" || type === "filter") {
@@ -77,7 +90,18 @@ $(() => {
         if (flag) return;
         let s = $(this).children().eq(3).text();
         let winrate = parseInt(s.split("%")[0]);
-        if (winrate < threshold) return;
+        let rarity = rank(winrate);
+        if (rarity == 0) return;
+        let bc = rgb[rarity - 1];
+        $(this).css("background-color", bc);
+        $(this).hover(
+          function () {
+            $(this).css("background-color", "#d6e2f0");
+          },
+          function () {
+            $(this).css("background-color", bc);
+          }
+        );
         let colors = $(this).find(".metalist-colors");
         colors.html(
           GetColors(colors.attr("data-colors").split("|"), "display", "meta")
@@ -102,8 +126,9 @@ $(() => {
           }
           isClicked = true;
           $(this).after("<td colspan = '5'></td>");
-          $(this).next().load("/Deck/"+id2+"/Gallery/");
-
+          $(this)
+            .next()
+            .load("/Deck/" + id2 + "/Gallery/");
         }
         $(this).click(click);
         table.append($(this));
