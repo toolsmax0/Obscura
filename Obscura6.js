@@ -92,7 +92,13 @@ $(() => {
         let winrate = parseInt(s.split("%")[0]);
         let rarity = rank(winrate);
         if (rarity == 0) return;
-        let bc = rgb[rarity - 1];
+        let hue = 240 - 3 * winrate;
+        // let hue = 180 - 45 * rarity;
+        let saturation = 100;
+        let lightness = 100 - 0.5 * (winrate - 60) - 5 * (rarity - 1);
+        // let lightness = 100 - 10 * (rarity - 1);
+        let bc = "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
+        // let bc = rgb[rarity - 1];
         $(this).css("background-color", bc);
         $(this).hover(
           function () {
