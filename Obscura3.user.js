@@ -65,6 +65,7 @@ $(() => {
   "use strict";
   var table = $(".clickable:first tbody:first");
   table.children().has("td").remove();
+  table.parent().removeClass("clickable");
   var next = location.href;
   function iterate(data) {
     next = $(data).find(".next").attr("href");
@@ -75,13 +76,38 @@ $(() => {
         var tr = $(this);
         var url = tr.find("a").attr("href");
         if (url == undefined) return;
+        tr.find("a").attr("href",location.href);
         var time = trimTime(tr.children().eq(10).children().eq(0).text());
-        if (checkDate(time) < -3){
-            next = null;
-            return false;
+        if (checkDate(time) < -3) {
+          next = null;
+          return false;
         }
         var dict = getDict();
         if (url in dict) return;
+        let isClicked = false;
+        function click() {
+          if (isClicked) {
+            $(this).next().toggle();
+            return;
+          }
+          isClicked = true;
+          $(this).after("<td colspan = '13'></td>");
+          $(this)
+            .next()
+            .load(url + "/visual .visualView");
+        }
+        tr.click(click);
+        //when hover set  background: #57583c!important; color: #fff!important; restore the color when mouseout
+        tr.hover(
+          function () {
+            $(this).css("background", "#57583c");
+            $(this).css("color", "#fff");
+          },
+          function () {
+            $(this).css("background", "");
+            $(this).css("color", "");
+          }
+        );
         table.append(tr);
         dict[url] = time;
         setDict(dict);

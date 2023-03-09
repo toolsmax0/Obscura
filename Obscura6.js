@@ -75,13 +75,13 @@ $(() => {
   mem[location.href] = table.find("a:first").attr("href");
   GM_setValue("mem", mem);
   table.children().remove();
-  function iterate(data) {
+  async function iterate(data) {
     next = $(data).find(".pagination a:last").attr("href");
     if (dest == null) next = null;
     let flag = false;
-    $(data)
+    await $(data)
       .find("tbody tr")
-      .each(function () {
+      .each(async function () {
         let url = $(this).find("a:first").attr("href");
         if (url == dest) {
           flag = true;
@@ -113,7 +113,7 @@ $(() => {
           GetColors(colors.attr("data-colors").split("|"), "display", "meta")
         );
         let id = url.split("-").pop();
-        $.get("/Deck/MtgoDeckExport/" + id, (data) => {
+        await $.get("/Deck/MtgoDeckExport/" + id, (data) => {
           GM_xmlhttpRequest({
             method: "POST",
             url: "http://localhost:7191",
@@ -138,11 +138,17 @@ $(() => {
         }
         $(this).click(click);
         table.append($(this));
+        await table.children().last().click();
       });
   }
-  function rec() {
+  async function rec() {
     if (next == null) {
       head.append(" Compleated");
+      //if head is clicked,click all entries in the table
+      head.click(() => {
+        table.children().click();
+      });
+
       return;
     }
     $.get(next, iterate).then(rec);
