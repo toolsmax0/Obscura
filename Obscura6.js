@@ -138,7 +138,7 @@ $(() => {
         }
         $(this).click(click);
         table.append($(this));
-        await table.children().last().click();
+        // await table.children().last().click();
       });
   }
   async function rec() {

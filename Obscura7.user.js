@@ -17,6 +17,12 @@ $(() => {
   "use strict";
   var table = $(".clickable:first tbody:first");
   table.parent().removeClass("clickable");
+  table.parent().off("click");
+  $("h1:first").click(() => {
+    table.parent().off("click");
+    table.parent().removeClass("clickable");
+  });
+
   table.find("tr:has(td)").each(function () {
     var tr = $(this);
     var url = tr.find("a").attr("href");
