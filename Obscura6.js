@@ -9,7 +9,7 @@
 // @grant        GM_getValue
 // @grant        GM_xmlhttpRequest
 // @run-at       document-start
-// @require      https://code.jquery.com/jquery-3.6.3.min.js
+// @require      https://code.jquery.com/jquery-3.7.0.min.js
 // @match        https://aetherhub.com/MTGA-Decks/*/
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // ==/UserScript==
@@ -92,17 +92,17 @@ $(() => {
         let winrate = parseInt(s.split("%")[0]);
         let rarity = rank(winrate);
         if (rarity == 0) return;
-        let hue = 240 - 3 * winrate;
+        let hue = 230 + 3 * (winrate - 60) + 5 * (rarity - 1);
         // let hue = 180 - 45 * rarity;
-        let saturation = 100;
-        let lightness = 100 - 0.5 * (winrate - 60) - 5 * (rarity - 1);
+        let saturation = 33 + 1.25 * (winrate - 60) + 5 * (rarity - 1);
+        let lightness = 7 + 2 * (winrate - 60) + 4 * (rarity - 1);
         // let lightness = 100 - 10 * (rarity - 1);
         let bc = "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
         // let bc = rgb[rarity - 1];
         $(this).css("background-color", bc);
         $(this).hover(
           function () {
-            $(this).css("background-color", "#d6e2f0");
+            $(this).css("background-color", "#142338");
           },
           function () {
             $(this).css("background-color", bc);
@@ -113,16 +113,16 @@ $(() => {
           GetColors(colors.attr("data-colors").split("|"), "display", "meta")
         );
         let id = url.split("-").pop();
-        await $.get("/Deck/MtgoDeckExport/" + id, (data) => {
-          GM_xmlhttpRequest({
-            method: "POST",
-            url: "http://localhost:7191",
-            data: data,
-            onload: (response) => {
-              $(this).children().eq(4).text(response.responseText);
-            },
-          });
-        });
+        // await $.get("/Deck/MtgoDeckExport/" + id, (data) => {
+        //   GM_xmlhttpRequest({
+        //     method: "POST",
+        //     url: "http://localhost:7191",
+        //     data: data,
+        //     onload: (response) => {
+        //       $(this).children().eq(4).text(response.responseText);
+        //     },
+        //   });
+        // });
         let id2 = url.split("/").pop();
         let isClicked = false;
         function click() {

@@ -8,8 +8,8 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-start
-// @require      https://code.jquery.com/jquery-3.6.1.min.js
-// @match        https://mtgdecks.net/Standard/tournaments*
+// @require      https://code.jquery.com/jquery-3.7.0.min.js
+// @match        https://mtgdecks.net/*/tournaments*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // ==/UserScript==
 

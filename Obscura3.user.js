@@ -8,7 +8,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-start
-// @require      https://code.jquery.com/jquery-3.6.1.min.js
+// @require      https://code.jquery.com/jquery-3.7.0.min.js
 // @match        https://mtgdecks.net/Standard/arena
 // @match        https://mtgdecks.net/Standard/BO3
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
@@ -31,9 +31,8 @@ function checkDate(date) {
     return 0;
   }
   var days = daysBetween(date, odate);
-  if (daysBetween(date,GM_getValue("date",date)) > 0) {
+  if (daysBetween(date,GM_getValue("date",date)) > 0) 
     GM_setValue("date", date);
-  
   return days;
 }
 
@@ -89,7 +88,7 @@ $(() => {
         var url = tr.find("a").attr("href");
         var text = tr.children().eq(0).text();
         if (url == undefined) return;
-        var time = trimTime(tr.children(".small").text());
+        var time = trimTime(tr.children(".small").children("strong").text());
         if (checkDate(time) < -3) {
           next = null;
           return false;
