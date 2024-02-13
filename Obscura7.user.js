@@ -7,7 +7,7 @@
 // @grant        unsafeWindow
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @run-at       document-start
+// @run-at       document-end
 // @require      https://code.jquery.com/jquery-3.7.0.min.js
 // @match        https://mtgdecks.net/*-tournament-*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
@@ -15,13 +15,12 @@
 
 $(() => {
   "use strict";
+  console.log();
   var table = $(".clickable:first tbody:first");
   table.parent().removeClass("clickable");
   table.parent().off("click");
-  $("h1:first").click(() => {
-    table.parent().off("click");
-    table.parent().removeClass("clickable");
-  });
+
+  console.log($("h2:first"));
 
   table.find("tr:has(td)").each(function () {
     var tr = $(this);
@@ -50,5 +49,15 @@ $(() => {
         $(this).css("color", "");
       }
     );
+  });
+
+  $(".card-item").click(function () {
+    table
+      .find("tr:has(td)")
+      .not(".hidden")
+      .each(function () {
+        console.log($(this));
+        $(this).click();
+      });
   });
 });
